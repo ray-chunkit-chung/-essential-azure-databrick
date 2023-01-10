@@ -8,6 +8,8 @@ https://learn.microsoft.com/en-us/azure/templates/Microsoft.Databricks/workspace
 
 https://learn.microsoft.com/en-us/cli/azure/deployment/group?view=azure-cli-latest
 
+https://learn.microsoft.com/en-us/azure/databricks/
+
 using dockerhub desktop container dev env with vscode
 
 ## Step 1 Login azure
@@ -50,6 +52,46 @@ az deployment group create --subscription $SUBSCRIPTION \
 #                            --parameters https://mysite/params.json \
 #                            --parameters MyValue=This MyArray=@array.json
 ```
+
+## Step 3 Login databricks to add users
+
+Click Launch Workspace for the first time
+
+image.png
+
+**(Optional)** Warm up by studying the following:
+
+ - Create notebook https://learn.microsoft.com/en-us/azure/databricks/getting-started/etl-quick-start
+
+ - Auto Loader/Delta lake https://learn.microsoft.com/en-us/azure/databricks/delta/
+
+ - Gen2 and Blob Storage https://learn.microsoft.com/en-us/azure/databricks/external-data/azure-storage
+
+ - Service principle https://learn.microsoft.com/en-us/azure/databricks/administration-guide/users-groups/service-principals
+
+ - Structured-Streaming https://learn.microsoft.com/en-us/azure/databricks/structured-streaming/
+
+<!-- ```bash
+sudo apt-get install -y python3 python3-dev
+sudo ln -sf /usr/bin/python3 /usr/bin/python
+export PYTHONPATH=/usr/bin/python
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+sudo python get-pip.py
+``` -->
+
+<!-- ```bash
+az extension add --name databricks
+``` -->
+
+
+## Bonus A Integrate with azure event hubs
+
+https://learn.microsoft.com/en-us/azure/databricks/structured-streaming/streaming-event-hubs
+
+
+## Bonus B xxxx
+
+https://learn.microsoft.com/en-us/azure/event-grid/event-grid-event-hubs-integration
 
 
 ## Finally Delete resources
