@@ -102,7 +102,7 @@ source .env
 az group delete -y --name $RESOURCE_GROUP
 ```
 
-There can be more managed resources to delete. Check them by
+There can be some managed resources to delete. Check them by
 ```bash
 az group list --subscription $SUBSCRIPTION
 ```
