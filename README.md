@@ -1,5 +1,5 @@
-# essential-azure-databrick
- essential-azure-databrick
+# essential-azure-databricks
+ essential-azure-databricks
 
 
 from codespace
