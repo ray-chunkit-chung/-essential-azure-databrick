@@ -34,7 +34,7 @@ export SKU_STORAGE="Standard_LRS"
 ```bash
 source .env
 az login --tenant $TENANT
-# az account set -s $SUBSCRIPTION
+az account set -s $SUBSCRIPTION
 ```
 
 ## Step 2 Deploy databricks
@@ -97,8 +97,18 @@ https://learn.microsoft.com/en-us/azure/event-grid/event-grid-event-hubs-integra
 ## Finally Delete resources
 
 After experiment, delete all resources to avoid charging a lot of money
-
 ```bash
 source .env
 az group delete -y --name $RESOURCE_GROUP
+```
+
+There can be more managed resources to delete. Check them by
+```bash
+az group list --subscription $SUBSCRIPTION
+```
+
+Delete them by
+```bash
+source .env
+az group delete --name $(az group list --subscription $SUBSCRIPTION | jq '.[].name' | tr -d '"')
 ```
