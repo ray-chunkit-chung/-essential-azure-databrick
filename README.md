@@ -38,6 +38,10 @@ https://stackoverflow.com/questions/70985859/moving-messages-received-from-azure
 https://stackoverflow.com/questions/56078432/structured-streaming-with-azure-service-bus-topics
 
 
+PowerBI databrick queries
+https://learn.microsoft.com/en-us/azure/databricks/sql/get-started/user-quickstart
+
+
 
 ## Step 1 Login azure
 
