@@ -12,6 +12,33 @@ https://learn.microsoft.com/en-us/azure/databricks/
 
 using dockerhub desktop container dev env with vscode
 
+
+unity-catalog
+https://learn.microsoft.com/en-us/azure/databricks/data-governance/unity-catalog/get-started
+
+
+Streaming, auto load, delta lake
+https://www.databricks.com/spark/getting-started-with-apache-spark/streaming
+
+https://docs.databricks.com/structured-streaming/production.html
+
+
+synapse
+https://docs.databricks.com/structured-streaming/synapse.html
+
+abfss vs wasbs
+https://docs.databricks.com/external-data/azure-storage.html
+
+
+read from different data sources
+https://learn.microsoft.com/en-us/azure/databricks/scenarios/databricks-connect-to-data-sources
+
+read from service bus
+https://stackoverflow.com/questions/70985859/moving-messages-received-from-azure-service-bus-to-azure-datalake-with-databrick
+https://stackoverflow.com/questions/56078432/structured-streaming-with-azure-service-bus-topics
+
+
+
 ## Step 1 Login azure
 
 Install azure cli
@@ -87,6 +114,8 @@ az extension add --name databricks
 ## Bonus A Integrate with azure event hubs
 
 https://learn.microsoft.com/en-us/azure/databricks/structured-streaming/streaming-event-hubs
+
+https://github.com/Azure/azure-event-hubs-spark/blob/master/README.md#latest-releases
 
 
 ## Bonus B xxxx
