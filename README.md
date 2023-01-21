@@ -91,7 +91,7 @@ az deployment group create --subscription $SUBSCRIPTION \
 
 Click Launch Workspace for the first time
 
-image.png
+![image](https://user-images.githubusercontent.com/26511618/213842664-ce48b51d-baa7-41c6-9f5e-607766171fa3.png)
 
 <!-- ```bash
 sudo apt-get install -y python3 python3-dev
