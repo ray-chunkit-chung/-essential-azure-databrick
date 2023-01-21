@@ -2,3 +2,4 @@ pymongo
 python-dotenv
 azure-cosmos
 azure-servicebus
+databricks-cli

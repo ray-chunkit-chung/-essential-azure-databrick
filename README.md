@@ -6,9 +6,11 @@ essential-azure-databricks using dockerhub desktop container dev env with vscode
 - <https://learn.microsoft.com/en-us/azure/templates/Microsoft.Databricks/workspaces?pivots=deployment-language-arm-template>
 - <https://learn.microsoft.com/en-us/cli/azure/deployment/group?view=azure-cli-latest>
 - <https://learn.microsoft.com/en-us/azure/databricks/>
+- Databrick cli
 
 How to access azure storage from databricks by Service principles
 
+- <https://learn.microsoft.com/en-us/azure/databricks/security/aad-storage-service-principal>
 - <https://learn.microsoft.com/en-us/azure/databricks/external-data/azure-storage>
 - <https://learn.microsoft.com/en-us/azure/databricks/sql/admin/data-access-configuration>
 - <https://learn.microsoft.com/en-us/azure/databricks/security/secrets/secret-scopes>
@@ -16,10 +18,11 @@ How to access azure storage from databricks by Service principles
 How to access azure storage from databricks by SAS
 <https://learn.microsoft.com/en-us/azure/storage/common/storage-sas-overview>
 
-Azure Vault, RBAC permissions model, best practices
+Azure Vault, RBAC permissions model, Multitenancy best practices
 
 - <https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide?tabs=azure-cli>
 - <https://learn.microsoft.com/en-us/azure/key-vault/general/best-practices>
+- <https://learn.microsoft.com/en-us/azure/architecture/guide/multitenant/service/key-vault>
 
 What is unity-catalog
 <https://learn.microsoft.com/en-us/azure/databricks/data-governance/unity-catalog/get-started>
@@ -111,9 +114,9 @@ sudo python get-pip.py
 az extension add --name databricks
 ``` -->
 
-## Step 4 Deploy service bus and demo data
+## Step 4 Access demo data in service bus from databricks
 
-This is for creat
+### Step 4.1 Deploy service bus
 
 ```bash
 source .env
@@ -126,7 +129,7 @@ export PRIMARY_CONNECTION_STRING="$(az servicebus namespace authorization-rule k
 export SECONDARY_CONNECTION_STRING="$(az servicebus namespace authorization-rule keys list --resource-group $RESOURCE_GROUP --namespace-name $SERVICEBUS_NAMESPACE --name RootManageSharedAccessKey | jq '.secondaryConnectionString' | tr -d '"')"
 ```
 
-Install python to run service bus demo data creation
+### Step 4.2 Install python to create demo data in service bus
 
 ```bash
 sudo apt-get install -y python3 python3-dev python3-venv
@@ -135,11 +138,84 @@ source .venv/bin/activate
 pip install --upgrade -r requirements.txt
 ```
 
-Send message to topic
+### Step 4.2 Send data to service bus topic
 
 ```bash
 source .env
 python example/send_message_to_service_bus_topic.py
+```
+
+### Step 4.3 xxxx
+
+## Step5 Access demo data in storage from databricks
+
+### Step5.1 Create a service principle
+
+Add service principle to storage
+
+<https://learn.microsoft.com/en-us/azure/databricks/security/aad-storage-service-principal>
+
+Add service principle to subscription
+
+### Step5.2 Install databricks-cli
+
+Create an Azure Key Vault-backed secret scope using the Databricks CLI
+
+- <https://learn.microsoft.com/en-us/azure/databricks/security/secrets/secret-scopes>
+- <https://learn.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/aad/user-aad-token>
+- <https://learn.microsoft.com/en-us/azure/databricks/sql/admin/data-access-configuration>
+
+Install databricks-cli
+
+```bash
+pip install --upgrade databricks-cli
+az extension add --name databricks
+```
+
+Configure databricks cli by adding Azure AD token (AAD_TOKEN) for users using the Azure CLI. Do not change 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d, as it is the app id of databricks software itself.
+```bash
+export DATABRICKS_AAD_TOKEN=$(az account get-access-token \
+--resource 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d \
+--query "accessToken")
+export WORKSPACE_ID=$(az databricks workspace show --name $DATABRICKS_WORKSPACE --resource-group $RESOURCE_GROUP | jq '.workspaceId' | tr -d '"')
+export WORKSPACE_URL="https://$(az databricks workspace show --name $DATABRICKS_WORKSPACE --resource-group $RESOURCE_GROUP | jq '.workspaceUrl' | tr -d '"')"
+echo $WORKSPACE_URL | databricks configure --aad-token
+```
+
+### Step5.3 Create secret scope for storage access
+
+Create databricks workspace secret scope backed by Azure key vault that we will add the service principle client secret into
+```bash
+export KEYVAULT_RESOURCE_ID=$(az keyvault show --name $KEYVAULT_NAME --resource-group 'manual3'  | jq '.id' | tr -d '"')
+export KEYVAULT_DNS="https://$KEYVAULT_NAME.vault.azure.net/"
+databricks secrets create-scope --scope $DATABRICKS_SECRET_SCOPE --scope-backend-type AZURE_KEYVAULT --resource-id $KEYVAULT_RESOURCE_ID --dns-name $KEYVAULT_DNS --initial-manage-principal users
+```
+
+
+### Step 5.4 Direct access using ABFS URI for Blob Storage or Azure Data Lake Storage Gen2
+
+```python
+# Configure authentication
+service_credential = dbutils.secrets.get(scope="<scope>",key="<service-credential-key>")
+spark.conf.set("fs.azure.account.auth.type.<storage-account>.dfs.core.windows.net", "OAuth")
+spark.conf.set("fs.azure.account.oauth.provider.type.<storage-account>.dfs.core.windows.net", "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider")
+spark.conf.set("fs.azure.account.oauth2.client.id.<storage-account>.dfs.core.windows.net", "<application-id>")
+spark.conf.set("fs.azure.account.oauth2.client.secret.<storage-account>.dfs.core.windows.net", service_credential)
+spark.conf.set("fs.azure.account.oauth2.client.endpoint.<storage-account>.dfs.core.windows.net", "https://login.microsoftonline.com/<directory-id>/oauth2/token")
+
+# Read Databricks Dataset IoT Devices JSON
+df = spark.read.json("/databricks-datasets/iot/iot_devices.json")
+
+# Write Delta table to external path
+df.write.save("abfss://<container-name>@<storage-account-name>.dfs.core.windows.net/<path-to-data>")
+
+
+# List filesystem
+dbutils.fs.ls("abfss://<container-name>@<storage-account-name>.dfs.core.windows.net/<path-to-data>")
+
+# Read IoT Devices JSON from ADLS Gen2 filesystem
+df2 = spark.read.load("abfss://<container-name>@<storage-account-name>.dfs.core.windows.net/<path-to-data>")
+display(df2)
 ```
 
 ## Bonus A Integrate with azure event hubs
