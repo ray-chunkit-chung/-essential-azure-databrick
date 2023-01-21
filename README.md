@@ -2,27 +2,32 @@
 
 essential-azure-databricks using dockerhub desktop container dev env with vscode
 
- - <https://learn.microsoft.com/en-us/azure/databricks/getting-started/>
-
- - <https://learn.microsoft.com/en-us/azure/templates/Microsoft.Databricks/workspaces?pivots=deployment-language-arm-template>
-
- - <https://learn.microsoft.com/en-us/cli/azure/deployment/group?view=azure-cli-latest>
-
- - <https://learn.microsoft.com/en-us/azure/databricks/>
+- <https://learn.microsoft.com/en-us/azure/databricks/getting-started/>
+- <https://learn.microsoft.com/en-us/azure/templates/Microsoft.Databricks/workspaces?pivots=deployment-language-arm-template>
+- <https://learn.microsoft.com/en-us/cli/azure/deployment/group?view=azure-cli-latest>
+- <https://learn.microsoft.com/en-us/azure/databricks/>
 
 How to access azure storage from databricks by Service principles
-<https://learn.microsoft.com/en-us/azure/databricks/external-data/azure-storage>
+
+- <https://learn.microsoft.com/en-us/azure/databricks/external-data/azure-storage>
+- <https://learn.microsoft.com/en-us/azure/databricks/sql/admin/data-access-configuration>
+- <https://learn.microsoft.com/en-us/azure/databricks/security/secrets/secret-scopes>
 
 How to access azure storage from databricks by SAS
 <https://learn.microsoft.com/en-us/azure/storage/common/storage-sas-overview>
+
+Azure Vault, RBAC permissions model, best practices
+
+- <https://learn.microsoft.com/en-us/azure/key-vault/general/rbac-guide?tabs=azure-cli>
+- <https://learn.microsoft.com/en-us/azure/key-vault/general/best-practices>
 
 What is unity-catalog
 <https://learn.microsoft.com/en-us/azure/databricks/data-governance/unity-catalog/get-started>
 
 What is Streaming, auto load, delta lake
- - <https://www.databricks.com/spark/getting-started-with-apache-spark/streaming>
 
- - <https://docs.databricks.com/structured-streaming/production.html>
+- <https://www.databricks.com/spark/getting-started-with-apache-spark/streaming>
+- <https://docs.databricks.com/structured-streaming/production.html>
 
 What is synapse
 <https://docs.databricks.com/structured-streaming/synapse.html>
@@ -34,9 +39,10 @@ How to read from different data sources
 <https://learn.microsoft.com/en-us/azure/databricks/scenarios/databricks-connect-to-data-sources>
 
 How to read from service bus
- - <https://stackoverflow.com/questions/70985859/moving-messages-received-from-azure-service-bus-to-azure-datalake-with-databrick>
- - <https://stackoverflow.com/questions/56078432/structured-streaming-with-azure-service-bus-topics>
- - <https://github.com/elastacloud/servicebusreceiver>
+
+- <https://stackoverflow.com/questions/70985859/moving-messages-received-from-azure-service-bus-to-azure-datalake-with-databrick>
+- <https://stackoverflow.com/questions/56078432/structured-streaming-with-azure-service-bus-topics>
+- <https://github.com/elastacloud/servicebusreceiver>
 
 How to connect PowerBI using databrick queries
 <https://learn.microsoft.com/en-us/azure/databricks/sql/get-started/user-quickstart>
