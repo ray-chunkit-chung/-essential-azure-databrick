@@ -1,47 +1,45 @@
 # essential-azure-databricks
 
-essential-azure-databricks
+essential-azure-databricks using dockerhub desktop container dev env with vscode
 
-https://learn.microsoft.com/en-us/azure/databricks/getting-started/
+ - <https://learn.microsoft.com/en-us/azure/databricks/getting-started/>
 
-https://learn.microsoft.com/en-us/azure/templates/Microsoft.Databricks/workspaces?pivots=deployment-language-arm-template
+ - <https://learn.microsoft.com/en-us/azure/templates/Microsoft.Databricks/workspaces?pivots=deployment-language-arm-template>
 
-https://learn.microsoft.com/en-us/cli/azure/deployment/group?view=azure-cli-latest
+ - <https://learn.microsoft.com/en-us/cli/azure/deployment/group?view=azure-cli-latest>
 
-https://learn.microsoft.com/en-us/azure/databricks/
+ - <https://learn.microsoft.com/en-us/azure/databricks/>
 
-using dockerhub desktop container dev env with vscode
+How to access azure storage from databricks by Service principles
+<https://learn.microsoft.com/en-us/azure/databricks/external-data/azure-storage>
 
+How to access azure storage from databricks by SAS
+<https://learn.microsoft.com/en-us/azure/storage/common/storage-sas-overview>
 
-unity-catalog
-https://learn.microsoft.com/en-us/azure/databricks/data-governance/unity-catalog/get-started
+What is unity-catalog
+<https://learn.microsoft.com/en-us/azure/databricks/data-governance/unity-catalog/get-started>
 
+What is Streaming, auto load, delta lake
+ - <https://www.databricks.com/spark/getting-started-with-apache-spark/streaming>
 
-Streaming, auto load, delta lake
-https://www.databricks.com/spark/getting-started-with-apache-spark/streaming
+ - <https://docs.databricks.com/structured-streaming/production.html>
 
-https://docs.databricks.com/structured-streaming/production.html
+What is synapse
+<https://docs.databricks.com/structured-streaming/synapse.html>
 
+What are abfss vs wasbs
+<https://docs.databricks.com/external-data/azure-storage.html>
 
-synapse
-https://docs.databricks.com/structured-streaming/synapse.html
+How to read from different data sources
+<https://learn.microsoft.com/en-us/azure/databricks/scenarios/databricks-connect-to-data-sources>
 
-abfss vs wasbs
-https://docs.databricks.com/external-data/azure-storage.html
+How to read from service bus
+ - <https://stackoverflow.com/questions/70985859/moving-messages-received-from-azure-service-bus-to-azure-datalake-with-databrick>
+ - <https://stackoverflow.com/questions/56078432/structured-streaming-with-azure-service-bus-topics>
+ - <https://github.com/elastacloud/servicebusreceiver>
 
-
-read from different data sources
-https://learn.microsoft.com/en-us/azure/databricks/scenarios/databricks-connect-to-data-sources
-
-read from service bus
-https://stackoverflow.com/questions/70985859/moving-messages-received-from-azure-service-bus-to-azure-datalake-with-databrick
-https://stackoverflow.com/questions/56078432/structured-streaming-with-azure-service-bus-topics
-
-
-PowerBI databrick queries
-https://learn.microsoft.com/en-us/azure/databricks/sql/get-started/user-quickstart
-
-
+How to connect PowerBI using databrick queries
+<https://learn.microsoft.com/en-us/azure/databricks/sql/get-started/user-quickstart>
 
 ## Step 1 Login azure
 
@@ -95,7 +93,6 @@ Click Launch Workspace for the first time
 
 image.png
 
-
 <!-- ```bash
 sudo apt-get install -y python3 python3-dev
 sudo ln -sf /usr/bin/python3 /usr/bin/python
@@ -139,48 +136,45 @@ source .env
 python example/send_message_to_service_bus_topic.py
 ```
 
-
 ## Bonus A Integrate with azure event hubs
 
-https://learn.microsoft.com/en-us/azure/databricks/structured-streaming/streaming-event-hubs
+<https://learn.microsoft.com/en-us/azure/databricks/structured-streaming/streaming-event-hubs>
 
-https://github.com/Azure/azure-event-hubs-spark/blob/master/README.md#latest-releases
-
+<https://github.com/Azure/azure-event-hubs-spark/blob/master/README.md#latest-releases>
 
 ## Bonus B xxxx
 
-https://learn.microsoft.com/en-us/azure/event-grid/event-grid-event-hubs-integration
-
-
+<https://learn.microsoft.com/en-us/azure/event-grid/event-grid-event-hubs-integration>
 
 ## Bonus C Databricks example
 
- - Create notebook https://learn.microsoft.com/en-us/azure/databricks/getting-started/etl-quick-start
+- Create notebook <https://learn.microsoft.com/en-us/azure/databricks/getting-started/etl-quick-start>
 
- - Auto Loader/Delta lake https://learn.microsoft.com/en-us/azure/databricks/delta/
+- Auto Loader/Delta lake <https://learn.microsoft.com/en-us/azure/databricks/delta/>
 
- - Gen2 and Blob Storage https://learn.microsoft.com/en-us/azure/databricks/external-data/azure-storage
+- Gen2 and Blob Storage <https://learn.microsoft.com/en-us/azure/databricks/external-data/azure-storage>
 
- - Service principle https://learn.microsoft.com/en-us/azure/databricks/administration-guide/users-groups/service-principals
+- Service principle <https://learn.microsoft.com/en-us/azure/databricks/administration-guide/users-groups/service-principals>
 
- - Structured-Streaming https://learn.microsoft.com/en-us/azure/databricks/structured-streaming/
-
-
+- Structured-Streaming <https://learn.microsoft.com/en-us/azure/databricks/structured-streaming/>
 
 ## Finally Delete resources
 
 After experiment, delete all resources to avoid charging a lot of money
+
 ```bash
 source .env
 az group delete -y --name $RESOURCE_GROUP
 ```
 
 There can be some managed resources to delete. Check them by
+
 ```bash
 az group list --subscription $SUBSCRIPTION
 ```
 
 Delete them by
+
 ```bash
 source .env
 az group delete --name $(az group list --subscription $SUBSCRIPTION | jq '.[].name' | tr -d '"')
