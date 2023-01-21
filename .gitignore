@@ -1,6 +1,7 @@
 # dev 
 local/
 .env
+.venv
 
 # python
 *.pyz
