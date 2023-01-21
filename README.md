@@ -108,20 +108,22 @@ sudo python get-pip.py
 az extension add --name databricks
 ``` -->
 
-## Step 4 Deploy service bus
+## Step 4 Deploy service bus and demo data
 
 This is for creat
 
-```
+```bash
 source .env
 az deployment group create --subscription $SUBSCRIPTION \
                            --resource-group $RESOURCE_GROUP \
                            --name rollout01 \
                            --template-file ARMTemplate/ServiceBus/template.json \
                            --parameters ARMTemplate/ServiceBus/parameters.json
+export PRIMARY_CONNECTION_STRING="$(az servicebus namespace authorization-rule keys list --resource-group $RESOURCE_GROUP --namespace-name $SERVICEBUS_NAMESPACE --name RootManageSharedAccessKey | jq '.primaryConnectionString' | tr -d '"')"
+export SECONDARY_CONNECTION_STRING="$(az servicebus namespace authorization-rule keys list --resource-group $RESOURCE_GROUP --namespace-name $SERVICEBUS_NAMESPACE --name RootManageSharedAccessKey | jq '.secondaryConnectionString' | tr -d '"')"
 ```
 
-Install
+Install python to run service bus demo data creation
 
 ```bash
 sudo apt-get install -y python3 python3-dev python3-venv
@@ -130,6 +132,12 @@ source .venv/bin/activate
 pip install --upgrade -r requirements.txt
 ```
 
+Send message to topic
+
+```bash
+source .env
+python example/send_message_to_service_bus_topic.py
+```
 
 
 ## Bonus A Integrate with azure event hubs
