@@ -60,6 +60,11 @@ export LOCATION="eastus"
 export RESOURCE_GROUP="xxx"
 export STORAGE_ACCOUNT="xxx"
 export SKU_STORAGE="Standard_LRS"
+export SERVICEBUS_NAMESPACE="xxx"
+export SERVICEBUS_QUEUE="xxxx"
+export SERVICEBUS_TOPIC="xxx"
+export SERVICEBUS_SUBSCRIPTION="xx"
+export COSMOS_NAME="xxx"
 ```
 
 ```bash
@@ -90,17 +95,6 @@ Click Launch Workspace for the first time
 
 image.png
 
-**(Optional)** Warm up by studying the following:
-
- - Create notebook https://learn.microsoft.com/en-us/azure/databricks/getting-started/etl-quick-start
-
- - Auto Loader/Delta lake https://learn.microsoft.com/en-us/azure/databricks/delta/
-
- - Gen2 and Blob Storage https://learn.microsoft.com/en-us/azure/databricks/external-data/azure-storage
-
- - Service principle https://learn.microsoft.com/en-us/azure/databricks/administration-guide/users-groups/service-principals
-
- - Structured-Streaming https://learn.microsoft.com/en-us/azure/databricks/structured-streaming/
 
 <!-- ```bash
 sudo apt-get install -y python3 python3-dev
@@ -114,6 +108,29 @@ sudo python get-pip.py
 az extension add --name databricks
 ``` -->
 
+## Step 4 Deploy service bus
+
+This is for creat
+
+```
+source .env
+az deployment group create --subscription $SUBSCRIPTION \
+                           --resource-group $RESOURCE_GROUP \
+                           --name rollout01 \
+                           --template-file ARMTemplate/ServiceBus/template.json \
+                           --parameters ARMTemplate/ServiceBus/parameters.json
+```
+
+Install
+
+```bash
+sudo apt-get install -y python3 python3-dev python3-venv
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade -r requirements.txt
+```
+
+
 
 ## Bonus A Integrate with azure event hubs
 
@@ -125,6 +142,21 @@ https://github.com/Azure/azure-event-hubs-spark/blob/master/README.md#latest-rel
 ## Bonus B xxxx
 
 https://learn.microsoft.com/en-us/azure/event-grid/event-grid-event-hubs-integration
+
+
+
+## Bonus C Databricks example
+
+ - Create notebook https://learn.microsoft.com/en-us/azure/databricks/getting-started/etl-quick-start
+
+ - Auto Loader/Delta lake https://learn.microsoft.com/en-us/azure/databricks/delta/
+
+ - Gen2 and Blob Storage https://learn.microsoft.com/en-us/azure/databricks/external-data/azure-storage
+
+ - Service principle https://learn.microsoft.com/en-us/azure/databricks/administration-guide/users-groups/service-principals
+
+ - Structured-Streaming https://learn.microsoft.com/en-us/azure/databricks/structured-streaming/
+
 
 
 ## Finally Delete resources

@@ -1,0 +1,4 @@
+pymongo
+python-dotenv
+azure-cosmos
+azure-servicebus

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "serviceBusNamespaceName": {
+      "value": "test3raynamespace"
+    },
+    "serviceBusQueueName": {
+      "value": "test3queue"
+    },
+    "serviceBusTopicName": {
+      "value": "test3topic"
+    },
+    "serviceBusSubscriptionName": {
+      "value": "test3subscription"
+    },
+    "serviceBusRuleName": {
+      "value": "test3rule"
+    }
+  }
+}
