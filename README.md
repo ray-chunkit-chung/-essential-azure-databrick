@@ -54,6 +54,8 @@ How to connect PowerBI using databrick queries
 
 ### Step 1.1 Create a service principle
 
+<https://learn.microsoft.com/en-us/azure/databricks/security/aad-storage-service-principal>
+
 Login portal > Azure Active Directory > New > App registration > Add client secret
 
 ### Step 1.2 Add the service principle to a subscription
@@ -164,20 +166,15 @@ PRIMARY_CONNECTION_STRING is required.
 
 ## Step5 Access demo data in storage from databricks
 
+<https://learn.microsoft.com/en-us/azure/databricks/security/aad-storage-service-principal>
+
+### Step5.1 Create a key vault for cross-resource access
+
 ```bash
 source .env
 az keyvault create --location $LOCATION --name $KEYVAULT_NAME --resource-group $RESOURCE_GROUP
 az keyvault set-policy --name $KEYVAULT_NAME --key-permissions all --spn $APP_ID
 ```
-
-
-### Step5.1 Create a service principle
-
-Add service principle to storage
-
-<https://learn.microsoft.com/en-us/azure/databricks/security/aad-storage-service-principal>
-
-Add service principle to subscription
 
 ### Step5.2 Install databricks-cli
 
@@ -197,11 +194,20 @@ az extension add --name databricks
 Configure databricks cli by adding Azure AD token (AAD_TOKEN) for users using the Azure CLI. Do not change 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d, as it is the app id of databricks software itself.
 
 ```bash
+# Get config values
 export DATABRICKS_AAD_TOKEN=$(az account get-access-token \
 --resource 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d \
 --query "accessToken")
 export WORKSPACE_ID=$(az databricks workspace show --name $DATABRICKS_WORKSPACE --resource-group $RESOURCE_GROUP | jq '.workspaceId' | tr -d '"')
 export WORKSPACE_URL="https://$(az databricks workspace show --name $DATABRICKS_WORKSPACE --resource-group $RESOURCE_GROUP | jq '.workspaceUrl' | tr -d '"')"
+
+# Check values
+echo $DATABRICKS_AAD_TOKEN
+echo $WORKSPACE_ID
+echo $WORKSPACE_URL
+
+# Configure databricks cli
+source .venv/bin/activate
 echo $WORKSPACE_URL | databricks configure --aad-token
 ```
 
@@ -210,9 +216,20 @@ echo $WORKSPACE_URL | databricks configure --aad-token
 Create databricks workspace secret scope backed by Azure key vault that we will add the service principle client secret into
 
 ```bash
-export KEYVAULT_RESOURCE_ID=$(az keyvault show --name $KEYVAULT_NAME --resource-group 'manual3'  | jq '.id' | tr -d '"')
+# Get config values
+export KEYVAULT_RESOURCE_ID=$(az keyvault show --name $KEYVAULT_NAME --resource-group $RESOURCE_GROUP  | jq '.id' | tr -d '"')
 export KEYVAULT_DNS="https://$KEYVAULT_NAME.vault.azure.net/"
+
+# Check values
+echo $KEYVAULT_RESOURCE_ID
+echo $KEYVAULT_DNS
+
 databricks secrets create-scope --scope $DATABRICKS_SECRET_SCOPE --scope-backend-type AZURE_KEYVAULT --resource-id $KEYVAULT_RESOURCE_ID --dns-name $KEYVAULT_DNS --initial-manage-principal users
+```
+
+TODO: debug
+```bash
+Error: b'<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>\n<title>Error 400 io.jsonwebtoken.security.SignatureException: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.</title>\n</head>\n<body><h2>HTTP ERROR 400</h2>\n<p>Problem accessing /api/2.0/secrets/scopes/create. Reason:\n<pre>    io.jsonwebtoken.security.SignatureException: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.</pre></p>\n</body>\n</html>\n'
 ```
 
 ### Step 5.4 Direct access using ABFS URI for Blob Storage or Azure Data Lake Storage Gen2
