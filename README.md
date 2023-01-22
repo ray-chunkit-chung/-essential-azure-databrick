@@ -52,17 +52,23 @@ How to connect PowerBI using databrick queries
 
 ## Step 1 Login azure
 
-Install azure cli
+### Step 1.1 Create a service principle
 
-```bash
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-```
+Login portal > Azure Active Directory > New > App registration > Add client secret
 
-Set app variables by saving in .env file
+### Step 1.2 Add the service principle to a subscription
+
+sSubscription > Access control (IAM) > Role Assignment > Contributor > Select member > Search the app name
+
+### Step 1.3 Set app variables
+
+Save the following variables in .env file
 
 ```bash
 export SUBSCRIPTION="xxx"
-export TENANT="xxx"
+export APP_ID="xxxx"
+export SECRET_VALUE="xxxxx"
+export TENANT_ID="xxxxx"
 export LOCATION="eastus"
 export RESOURCE_GROUP="xxx"
 export STORAGE_ACCOUNT="xxx"
@@ -72,11 +78,18 @@ export SERVICEBUS_QUEUE="xxxx"
 export SERVICEBUS_TOPIC="xxx"
 export SERVICEBUS_SUBSCRIPTION="xx"
 export COSMOS_NAME="xxx"
+export DATABRICKS_WORKSPACE="xxx"
+export DATABRICKS_SECRET_SCOPE="xxxx"
+export KEYVAULT_NAME="xxxx"
 ```
+
+### Step 1.4 Install azure cli and login
 
 ```bash
 source .env
-az login --tenant $TENANT
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+# az login --tenant $TENANT
+az login --service-principal -u $APP_ID -p $SECRET_VALUE --tenant $TENANT_ID
 az account set -s $SUBSCRIPTION
 ```
 
@@ -145,9 +158,18 @@ source .env
 python example/send_message_to_service_bus_topic.py
 ```
 
+PRIMARY_CONNECTION_STRING is required.
+
 ### Step 4.3 xxxx
 
 ## Step5 Access demo data in storage from databricks
+
+```bash
+source .env
+az keyvault create --location $LOCATION --name $KEYVAULT_NAME --resource-group $RESOURCE_GROUP
+az keyvault set-policy --name $KEYVAULT_NAME --key-permissions all --spn $APP_ID
+```
+
 
 ### Step5.1 Create a service principle
 
@@ -173,6 +195,7 @@ az extension add --name databricks
 ```
 
 Configure databricks cli by adding Azure AD token (AAD_TOKEN) for users using the Azure CLI. Do not change 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d, as it is the app id of databricks software itself.
+
 ```bash
 export DATABRICKS_AAD_TOKEN=$(az account get-access-token \
 --resource 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d \
@@ -182,15 +205,15 @@ export WORKSPACE_URL="https://$(az databricks workspace show --name $DATABRICKS_
 echo $WORKSPACE_URL | databricks configure --aad-token
 ```
 
-### Step5.3 Create secret scope for storage access
+### Step5.3 Create key-vault backed secret scope for storage access
 
 Create databricks workspace secret scope backed by Azure key vault that we will add the service principle client secret into
+
 ```bash
 export KEYVAULT_RESOURCE_ID=$(az keyvault show --name $KEYVAULT_NAME --resource-group 'manual3'  | jq '.id' | tr -d '"')
 export KEYVAULT_DNS="https://$KEYVAULT_NAME.vault.azure.net/"
 databricks secrets create-scope --scope $DATABRICKS_SECRET_SCOPE --scope-backend-type AZURE_KEYVAULT --resource-id $KEYVAULT_RESOURCE_ID --dns-name $KEYVAULT_DNS --initial-manage-principal users
 ```
-
 
 ### Step 5.4 Direct access using ABFS URI for Blob Storage or Azure Data Lake Storage Gen2
 
