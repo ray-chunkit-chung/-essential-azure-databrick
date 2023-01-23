@@ -133,6 +133,8 @@ az extension add --name databricks
 
 ## Step 4 Access demo data in service bus from databricks
 
+<https://github.com/elastacloud/servicebusreceiver>
+
 ### Step 4.1 Deploy service bus
 
 ```bash
