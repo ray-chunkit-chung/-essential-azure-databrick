@@ -16,7 +16,9 @@ How to access azure storage from databricks by Service principles
 - <https://learn.microsoft.com/en-us/azure/databricks/security/secrets/secret-scopes>
 
 How to access azure storage from databricks by SAS
-<https://learn.microsoft.com/en-us/azure/storage/common/storage-sas-overview>
+
+- <https://docs.databricks.com/external-data/azure-storage.html>
+- <https://learn.microsoft.com/en-us/azure/storage/common/storage-sas-overview>
 
 Azure Vault, RBAC permissions model, Multitenancy best practices
 
