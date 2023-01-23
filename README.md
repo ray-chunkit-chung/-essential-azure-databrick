@@ -133,7 +133,8 @@ az extension add --name databricks
 
 ## Step 4 Access demo data in service bus from databricks
 
-<https://github.com/elastacloud/servicebusreceiver>
+- <https://github.com/elastacloud/servicebusreceiver>
+- <https://stackoverflow.com/questions/56078432/structured-streaming-with-azure-service-bus-topics>
 
 ### Step 4.1 Deploy service bus
 
